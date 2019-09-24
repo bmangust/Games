@@ -6,7 +6,7 @@
 /*   By: akraig <akraig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 00:12:04 by akraig            #+#    #+#             */
-/*   Updated: 2019/09/22 13:35:03 by akraig           ###   ########.fr       */
+/*   Updated: 2019/09/24 20:11:36 by akraig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main()
 {
 	srand(time(NULL));
 	char *str;
-	str = "apartment keyboard student sentense";
+	str = "apartment keyboard student sentense storage result pointer";
 	char *salut = "                                   .''.       \n       .''.      .        *''*    :_\\/_:     . \n      :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.\n  .''.: /\\ :   ./)\\   ':'* /\\ * :  '..'.  -=:o:=-\n :_\\/_:'.:::.    ' *''*    * '.\'/.' _\\(/_'.':'.'\n : /\\ : :::::     *_\\/_*     -= o =-  /)\\    '  *\n  '..'  ':::'     * /\\ *     .'/.\'.   '\n      *            *..*         :      *\n	   *         *                *   *\n        *	    *                  *\n";
 	char **words = ft_strsplit(str, ' ');
 	int word_index = rand() % 4;
@@ -31,6 +31,7 @@ int main()
 		guessed_word[i] = '.';
 	char guessed_letter;
 	
+	printf("            ====== Rules: =====\nPrograms guesses one word, your goal is to guess that word.\nYou can enter letter by letter or a whole word.\n          ====== Let's begin =====\n");
 	while (left_letters)
 	{
 		printf("\ncurret result:\n%s\n", guessed_word);
@@ -43,7 +44,7 @@ int main()
 		{
 			for (int j = 0; j < word_len; j++)
 			{
-				if (guessed_letter == words[word_index][j])
+				if (guessed_letter == words[word_index][j] && guessed_word[j] == '.')
 				{
 					guessed_word[j] = guessed_letter;
 					left_letters--;
