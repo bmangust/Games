@@ -1,9 +1,9 @@
 This is my text version of a TicTacToe game
 
 features:
-3 game modes
-random ai
-rules inside
+- 3 game modes
+- random ai
+- rules inside
 
 
 to do:
