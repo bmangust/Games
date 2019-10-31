@@ -34,54 +34,6 @@ class TicTacToeGame {
 		this._playerMove(this._current);
 	}
 	
-	//need to stop executing code if no package came from player
-	// _playerMove(index, callback) {
-	// 	this._sendToPlayer('message', index, 'Your turn');
-	// 	this._sendToPlayer('message', index ^ 1, 'Please wait');
-
-	// 	let promise = new Promise ((resolve, reject) => {
-	// 		console.log(`current player: ${this._current + 1}`);
-	// 		this._players[index].on('square', (sq) => {
-	// 			console.log(`got answer: ${sq}`);
-	// 			if (sq !== null && this._field[sq] === 0) {
-	// 				resolve(sq);
-	// 			}
-	// 			else
-	// 				reject(new Error('misclick or cell is busy'));
-	// 		});
-	// 	})
-	// 	promise.then(
-	// 		result => {
-	// 			callback (result);
-	// 		},
-	// 		error => {
-	// 			this._sendToPlayer('message', index, 'This cell is already occupied, try again');
-	// 		}
-	// 	)
-	// }
-
-	// _responseToPlayer(sq) {
-	// 	this._field[sq] = this._playerSymbols[index];
-	// 	this._sendToPlayer('resp', index, sq);
-	// 	console.log(`now player ${index + 1} moves`);
-	// 	this._sendField();
-	// 	console.log(`Current player: ${this._current + 1}`);
-	// }
-
-	// _waitForTurn() {
-	// 	let winner = this._checkWinner(); //returns -1 if theres no winner or 0 or 1 respectively
-	// 	while(winner === -1) {
-	// 		if (this._current === 0) {
-	// 			this._playerMove(0, this._responseToPlayer(sq) {
-	// 				winner = this._checkWinner();
-	// 				this._changePlayer();
-	// 			});
-	// 		} else {
-	// 			this._playerMove(1);
-	// 			this._changePlayer();
-	// 		}
-	// 	}
-	// }
 
 	// //need to stop executing code if no package came from player
 	_playerMove(index) {
@@ -111,10 +63,7 @@ class TicTacToeGame {
 				if (winner !== -1) {
 					this._sendToPlayer('message', this._current, 'You win!');
 					this._sendToPlayer('message', this._current ^ 1, 'You lose');
-					// this._sendToPlayers('endgame', 'See you next time');
 					setTimeout(() => {
-						// this._sendToPlayer('redirect', this._current, '/');
-						// this._sendToPlayer('redirect', this._current ^ 1, '/');
 						this._sendToPlayer('endgame', this._current, 'Start a new game?');
 						let promise = new Promise((resove, reject) => {
 							this._players[this._current].once('endgame', (c) => {
