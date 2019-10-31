@@ -150,6 +150,8 @@ const clearCanvas = () => {
 };
 
 const updateField = (f) => {
+	console.log(`updating field`);
+
 	clearCanvas();
 	drawGrid();
 	f.forEach((cell, index) => {
@@ -185,11 +187,27 @@ socket.on('resp', (sq) => {
 });
 socket.on('index', (index) => {
 	playerIndex = index;
-	// console.log(`Now Im player ${index + 1}`)
 });
 socket.on('field', (f) => {
 	console.log(`got field: ${f}`);
 	updateField(f);
+});
+// socket.on('endgame', (message) => {
+// 	setTimeout(() => {
+// 		console.log(`got endgame message: ${message}`);
+// 		let c = confirm(message);
+// 		if (c)
+// 			socket.emit('endgame', true)
+// 		else
+// 			socket.emit('endgame', false)
+// 	}, 100);
+	
+// });
+// socket.on('games', (games) => {
+// 	console.log(`games: ${games}`);
+// });
+socket.on('redirect', (url) => {
+	window.location.href = url;
 });
 
 addCanvasListener();
