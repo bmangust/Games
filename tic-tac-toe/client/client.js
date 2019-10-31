@@ -134,7 +134,6 @@ const getClickedSquare = (x, y) => {
 
 
 const drawCell = (cell) => {
-	// console.log(`recieved cell ${cell} from player ${playerIndex + 1}`);
 	if (playerIndex === 0) {
 		drawCrossAt(cell);
 	}
@@ -192,52 +191,17 @@ socket.on('field', (f) => {
 	console.log(`got field: ${f}`);
 	updateField(f);
 });
-// socket.on('endgame', (message) => {
-// 	setTimeout(() => {
-// 		console.log(`got endgame message: ${message}`);
-// 		let c = confirm(message);
-// 		if (c)
-// 			socket.emit('endgame', true)
-// 		else
-// 			socket.emit('endgame', false)
-// 	}, 100);
-	
-// });
-// socket.on('games', (games) => {
-// 	console.log(`games: ${games}`);
-// });
+socket.on('endgame', (message) => {
+	console.log(`got endgame message: ${message}`);
+	let c = confirm(message);
+	if (c)
+		socket.emit('endgame', true)
+	else
+		socket.emit('endgame', false)
+});
 socket.on('redirect', (url) => {
 	window.location.href = url;
 });
 
 addCanvasListener();
 drawGrid();
-
-
-
-
-
-// const onFormSubmitted = (e) => {
-// 	e.preventDefault();
-// 	const input = document.querySelector('#chat');
-// 	const text = input.value;
-// 	input.value = '';
-
-// 	socket.emit('message', text);
-// };
-
-// const addButtonListeners = () => {
-// 	['rock', 'paper', 'scissors'].forEach((id) => {
-// 		const button = document.getElementById(id);
-// 		button.addEventListener('click', () => {
-// 			console.log(id);
-// 			socket.emit('turn', id);
-// 		})
-// 	});
-// };
-
-// document
-// 	.querySelector('#chat-form')
-// 	.addEventListener('submit', onFormSubmitted);
-
-// addButtonListeners();

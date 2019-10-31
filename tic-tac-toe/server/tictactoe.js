@@ -1,5 +1,3 @@
-// const canvas = document.getElementById(canvas);
-
 class TicTacToeGame {
 	constructor(p1, p2, id) {
 		this._id = id;
@@ -87,9 +85,9 @@ class TicTacToeGame {
 
 	// //need to stop executing code if no package came from player
 	_playerMove(index) {
+		let winner;
 		this._sendToPlayer('message', index, 'Your turn');
 		this._sendToPlayer('message', (index + 1) % 2, 'Please wait');
-		let winner = this._checkWinner();
 		let promise = new Promise ((resolve, reject) => {
 			console.log(`current player: ${this._current + 1}`);
 
@@ -110,6 +108,38 @@ class TicTacToeGame {
 				this._sendField();
 				console.log(`NOW Current player: ${index + 1}`);
 				winner = this._checkWinner();
+				if (winner !== -1) {
+					this._sendToPlayer('message', this._current, 'You win!');
+					this._sendToPlayer('message', this._current ^ 1, 'You lose');
+					// this._sendToPlayers('endgame', 'See you next time');
+					setTimeout(() => {
+						// this._sendToPlayer('redirect', this._current, '/');
+						// this._sendToPlayer('redirect', this._current ^ 1, '/');
+						this._sendToPlayer('endgame', this._current, 'Start a new game?');
+						let promise = new Promise((resove, reject) => {
+							this._players[this._current].once('endgame', (c) => {
+								if (c === true) {
+									resove(c);
+									return ;
+								}
+								else{
+									this._sendToPlayers('message', 'See you next time');
+									setTimeout(() => {
+										this._sendToPlayers('redirect', '/');
+									}, 1000);
+									return ;
+								}
+							});
+						});
+						promise.then(
+							c => {
+								this._startGame();
+								return ;
+							}
+						)
+					}, 1000)
+					return ;
+				}
 				this._changePlayer()
 				this._playerMove(this._current);
 				return ;
@@ -132,32 +162,6 @@ class TicTacToeGame {
 			(field[2] === 'x' && field[5] === 'x' && field[8] === 'x') ||
 			(field[0] === 'x' && field[4] === 'x' && field[8] === 'x') ||
 			(field[2] === 'x' && field[4] === 'x' && field[6] === 'x')) {
-				this._sendToPlayer('message', this._current, 'You win!');
-				this._sendToPlayer('message', (this._current + 1) % 2, 'You lose');
-				this._sendToPlayer('endgame', this._current, 'See you next time');
-				setTimeout(() => {
-					this._sendToPlayer('redirect', this._current ^ 1, '/');
-				}, 1000);
-				// this._sendToPlayer('endgame', this._current, 'Start a new game?');
-				// let promise = new Promise((resove, reject) => {
-				// 	this._players[this._current].once('endgame', (c) => {
-				// 		if (c === true) {
-				// 			resove(c);
-				// 			return ;
-				// 		}
-				// 		else{
-				// 			this._sendToPlayer('message', this._current ^ 1, 'See you next time');
-				// 			this._sendToPlayer('redirect', this._current ^ 1, '/');
-				// 			return ;
-				// 		}
-				// 	});
-				// });
-				// promise.then(
-				// 	c => {
-				// 		this._startGame();
-				// 		return ;
-				// 	}
-				// )
 				return 0;
 			}
 		else if ((field[0] === 'o' && field[1] === 'o' && field[2] === 'o') ||
@@ -168,32 +172,6 @@ class TicTacToeGame {
 				(field[2] === 'o' && field[5] === 'o' && field[8] === 'o') ||
 				(field[0] === 'o' && field[4] === 'o' && field[8] === 'o') ||
 				(field[2] === 'o' && field[4] === 'o' && field[6] === 'o')) {
-				this._sendToPlayer('message', this._current, 'You win!');
-				this._sendToPlayer('message', this._current ^ 1, 'You lose');
-				this._sendToPlayer('endgame', this._current, 'See you next time');
-				setTimeout(() => {
-					this._sendToPlayer('redirect', this._current ^ 1, '/');
-				}, 1000);
-				// this._sendToPlayer('endgame', this._current, 'Start a new game?');
-				// let promise = new Promise((resove, reject) => {
-				// 	this._players[this._current].once('endgame', (c) => {
-				// 		if (c === true) {
-				// 			resove(c);
-				// 			return ;
-				// 		}
-				// 		else {
-				// 			this._sendToPlayer('message', this._current, 'See you next time');
-				// 			this._sendToPlayer('redirect', this._current, '/');
-				// 			return ;
-				// 		}
-				// 	});
-				// });
-				// promise.then(
-				// 	c => {
-				// 		this._startGame();
-				// 		return ;
-				// 	}
-				// )
 				return 1;
 			}
 		else

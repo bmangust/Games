@@ -1,7 +1,6 @@
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-// const RpsGame = require('./rps.js');
 const TicTacToeGame = require('./tictactoe.js');
 
 const app = express();
@@ -39,31 +38,18 @@ io.on('connection', (socket) => {
 		new TicTacToeGame (waitingPlayer, socket, id);
 		games.push(id);
 		id++;
-		// document.getElementById('#game_list');
 		waitingPlayer = null;
 	}
 	else {
 		waitingPlayer = socket;
-		// players.push[socket];
 		waitingPlayer.emit('message', 'Waiting for the second player');
 	}
-	// socket.emit('message', 'Hi, you are connected!');
 	socket.on('square', (sq) => {
 		console.log(`sq: ${sq}`);
 		
 	});
 	socket.on('disconnect', (data) => {
 		console.log('Someone disconnected');
-		// let index = players.indexOf(socket);
-		// let opponent;
-		// if (index % 2 == 0)
-		// 	opponent = players[index + 1];
-		// else
-		// 	opponent = players[index - 1];
-		// players.splice(index, 1);
-		// players.splice(players.indexOf(opponent), 1);
-		// opponent.disconnect();
-		// console.log(players);
 	});
 });
 
