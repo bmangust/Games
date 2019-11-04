@@ -1,0 +1,48 @@
+.canvas {
+    display: inline-block;
+    background-color: #ffffff;
+    border: 3px solid black;
+    position: relative;
+    height: 600px;
+    width: 600px;
+}
+
+canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#grid-layer {
+    z-index: 2;
+}
+
+#game-layer {
+    z-index: 1;
+}
+
+.message>* {
+    font-size: 1.5em;
+}
+
+.message {
+    padding-top: 30px;
+}
+
+#game-message {
+    font-size: 2em;
+}
+
+.score>* {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.space {
+    width: 280px;
+}
+
+#opponent-score, #player-score {
+    padding: 0 20px;
+}

@@ -6,11 +6,10 @@ class TicTacToeGame {
 		this._current = 0;
 		this._playerSymbols = ['x', 'o'];
 		this._turn = null;
-		
+		this._score = [0,0];
 		this._startGame();
 
 	}
-	
 
 	_sendField() {
 		this._sendToPlayers('field', this._field);
@@ -34,8 +33,6 @@ class TicTacToeGame {
 		this._playerMove(this._current);
 	}
 	
-
-	// //need to stop executing code if no package came from player
 	_playerMove(index) {
 		let winner;
 		this._sendToPlayer('message', index, 'Your turn');
@@ -61,17 +58,23 @@ class TicTacToeGame {
 				console.log(`NOW Current player: ${index + 1}`);
 				winner = this._checkWinner();
 				if (winner !== -1) {
-					this._sendToPlayer('message', this._current, 'You win!');
-					this._sendToPlayer('message', this._current ^ 1, 'You lose');
+					if (winner === 0) {
+						this._sendToPlayers('message', 'Draw!');
+					}
+					else {
+						this._sendToPlayer('message', this._current, 'You win!');
+						this._sendToPlayer('message', this._current ^ 1, 'You lose');
+						this._updateScore();
+					}
 					setTimeout(() => {
-						this._sendToPlayer('endgame', this._current, 'Start a new game?');
+						this._sendToPlayers('endgame', 'Start a new game?');
 						let promise = new Promise((resove, reject) => {
 							this._players[this._current].once('endgame', (c) => {
 								if (c === true) {
 									resove(c);
 									return ;
 								}
-								else{
+								else {
 									this._sendToPlayers('message', 'See you next time');
 									setTimeout(() => {
 										this._sendToPlayers('redirect', '/');
@@ -102,29 +105,37 @@ class TicTacToeGame {
 
 	_checkWinner() {
 		console.log(`checking winner`);
-		let field = this._field;
-		if ((field[0] === 'x' && field[1] === 'x' && field[2] === 'x') ||
-			(field[3] === 'x' && field[4] === 'x' && field[5] === 'x') ||
-			(field[6] === 'x' && field[7] === 'x' && field[8] === 'x') ||
-			(field[0] === 'x' && field[3] === 'x' && field[6] === 'x') ||
-			(field[1] === 'x' && field[4] === 'x' && field[7] === 'x') ||
-			(field[2] === 'x' && field[5] === 'x' && field[8] === 'x') ||
-			(field[0] === 'x' && field[4] === 'x' && field[8] === 'x') ||
-			(field[2] === 'x' && field[4] === 'x' && field[6] === 'x')) {
+		const field = this._field;
+		const sym = this._playerSymbols[this._current];
+		let cnt = 0;
+		if ((field[0] === sym && field[1] === sym && field[2] === sym) ||
+			(field[3] === sym && field[4] === sym && field[5] === sym) ||
+			(field[6] === sym && field[7] === sym && field[8] === sym) ||
+			(field[0] === sym && field[3] === sym && field[6] === sym) ||
+			(field[1] === sym && field[4] === sym && field[7] === sym) ||
+			(field[2] === sym && field[5] === sym && field[8] === sym) ||
+			(field[0] === sym && field[4] === sym && field[8] === sym) ||
+			(field[2] === sym && field[4] === sym && field[6] === sym)) {
+				if (sym === 'x')
+					return 1;
+				else
+					return 2;
+			}
+		else {
+			field.forEach((cell) => {
+				if (cell === 0)
+					cnt++;
+			});
+			if (cnt === 0)
 				return 0;
-			}
-		else if ((field[0] === 'o' && field[1] === 'o' && field[2] === 'o') ||
-				(field[3] === 'o' && field[4] === 'o' && field[5] === 'o') ||
-				(field[6] === 'o' && field[7] === 'o' && field[8] === 'o') ||
-				(field[0] === 'o' && field[3] === 'o' && field[6] === 'o') ||
-				(field[1] === 'o' && field[4] === 'o' && field[7] === 'o') ||
-				(field[2] === 'o' && field[5] === 'o' && field[8] === 'o') ||
-				(field[0] === 'o' && field[4] === 'o' && field[8] === 'o') ||
-				(field[2] === 'o' && field[4] === 'o' && field[6] === 'o')) {
-				return 1;
-			}
-		else
 			return -1;
+		}
+	}
+
+	_updateScore()
+	{
+		this._score[this._current] += 1;
+		this._sendToPlayers('score', this._score);
 	}
 
 	_sendToPlayer(type, playerIndex, msg) {

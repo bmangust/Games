@@ -1,24 +1,29 @@
 
 const socket = io();
-const canvas = document.getElementById("canvas");
-const ctx = this.canvas.getContext('2d');
+const field = document.getElementsByClassName("canvas")[0];
+const canvas = document.getElementById("game-layer");
+const grid = document.getElementById("grid-layer").getContext('2d');
+const ctx = canvas.getContext('2d');
 let playerIndex = null;
-let field;
+const player_index = document.getElementById("player-number");
+const message = document.querySelector('#game-message');
+const my_score = document.querySelector("#player-score");
+const opp_score = document.querySelector("#opponent-score");
 const cW = 600;
 const cH = 600;
 
 const drawGrid = () => {
-	ctx.lineWidth = 4;
-	ctx.beginPath();
-	ctx.moveTo(200, 0);
-	ctx.lineTo(200, 600);
-	ctx.moveTo(400, 0);
-	ctx.lineTo(400, 600);
-	ctx.moveTo(0, 200);
-	ctx.lineTo(600, 200);
-	ctx.moveTo(0, 400);
-	ctx.lineTo(600, 400);
-	ctx.stroke();
+	grid.lineWidth = 4;
+	grid.beginPath();
+	grid.moveTo(200, 0);
+	grid.lineTo(200, 600);
+	grid.moveTo(400, 0);
+	grid.lineTo(400, 600);
+	grid.moveTo(0, 200);
+	grid.lineTo(600, 200);
+	grid.moveTo(0, 400);
+	grid.lineTo(600, 400);
+	grid.stroke();
 };
 
 const circle = function (x, y, radius, fillCircle) {
@@ -47,68 +52,63 @@ const drawCross = (x, y) => {
 	ctx.stroke();
 };
 
-const drawCrossAt = (cell) => {
+const drawSignAt = (cell, s) => {
 	switch (cell) {
 		case 0:
-			drawCross(100, 100);
+			if (s === 'x')
+				drawCross(100, 100);
+			else if (s === 'o')
+				drawCircle(100, 100);
 			break;
 		case 1:
-			drawCross(300, 100);
+			if (s === 'x')
+				drawCross(300, 100);
+			else if (s === 'o')
+				drawCircle(300, 100);	
 			break;
 		case 2:
-			drawCross(500, 100);
+			if (s === 'x')
+				drawCross(500, 100);
+			else if (s === 'o')
+				drawCircle(500, 100);
 			break;
 		case 3:
-			drawCross(100, 300);
+			if (s === 'x')
+				drawCross(100, 300);
+			else if (s === 'o')
+				drawCircle(100, 300);
 			break;
 		case 4:
-			drawCross(300, 300);
+			if (s === 'x')
+				drawCross(300, 300);
+			else if (s === 'o')
+				drawCircle(300, 300);
 			break;
 		case 5:
-			drawCross(500, 300);
+			if (s === 'x')
+				drawCross(500, 300);
+			else if (s === 'o')
+				drawCircle(500, 300);
 			break;
 		case 6:
-			drawCross(100, 500);
+			if (s === 'x')
+				drawCross(100, 500);
+			else if (s === 'o')
+				drawCircle(100, 500);
 			break;
 		case 7:
-			drawCross(300, 500);
+			if (s === 'x')
+				drawCross(300, 500);
+			else if (s === 'o')
+				drawCircle(300, 500);
 			break;
 		case 8:
-			drawCross(500, 500);
+			if (s === 'x')
+				drawCross(500, 500);
+			else if (s === 'o')
+				drawCircle(500, 500);
 			break;
 	};
-};
-
-const drawCircleAt = (cell) => {
-	switch (cell) {
-		case 0:
-			drawCircle(100, 100);
-			break;
-		case 1:
-			drawCircle(300, 100);
-			break;
-		case 2:
-			drawCircle(500, 100);
-			break;
-		case 3:
-			drawCircle(100, 300);
-			break;
-		case 4:
-			drawCircle(300, 300);
-			break;
-		case 5:
-			drawCircle(500, 300);
-			break;
-		case 6:
-			drawCircle(100, 500);
-			break;
-		case 7:
-			drawCircle(300, 500);
-			break;
-		case 8:
-			drawCircle(500, 500);
-			break;
-	}
 };
 
 const getClickedSquare = (x, y) => {
@@ -135,10 +135,10 @@ const getClickedSquare = (x, y) => {
 
 const drawCell = (cell) => {
 	if (playerIndex === 0) {
-		drawCrossAt(cell);
+		drawSignAt(cell, "x");
 	}
 	else if (playerIndex === 1) {
-		drawCircleAt(cell);
+		drawSignAt(cell, "o");
 	}
 	
 };
@@ -149,32 +149,26 @@ const clearCanvas = () => {
 };
 
 const updateField = (f) => {
-	console.log(`updating field`);
-
 	clearCanvas();
-	drawGrid();
 	f.forEach((cell, index) => {
-		if (cell === 'o') {
-			console.log(`at cell ${index} sits ${cell}`);
-			drawCircleAt(index);
-		}
-		else if (cell === 'x') {
-			console.log(`at cell ${index} sits ${cell}`);
-			drawCrossAt(index);
-		}
+		drawSignAt(index, cell);
+		// if (cell === 'o') {
+		// 	drawCircleAt(index);
+		// }
+		// else if (cell === 'x') {
+		// 	drawCrossAt(index);
+		// }
 	});
 };
 
 const writeEvent = (text) => {
-	const message = document.querySelector('#message');
 	message.innerHTML = text;
-	console.log(text);
 };
 
 const addCanvasListener = () => {
-	canvas.addEventListener('click', () => {
-		let x = event.clientX;
-		let y = event.clientY;
+	field.addEventListener('click', () => {
+		let x = event.clientX - field.getBoundingClientRect().left;
+		let y = event.clientY - field.getBoundingClientRect().top;
 		let sq = getClickedSquare(x, y);
 		socket.emit('square', sq);
 	});
@@ -186,13 +180,24 @@ socket.on('resp', (sq) => {
 });
 socket.on('index', (index) => {
 	playerIndex = index;
+	player_index.innerHTML = index + 1;
 });
 socket.on('field', (f) => {
-	console.log(`got field: ${f}`);
 	updateField(f);
 });
+socket.on('score', (score) => {
+	if (player_index.innerHTML == 1)
+	{
+		my_score.innerHTML = score[0];
+		opp_score.innerHTML = score[1];
+	}
+	else if (player_index.innerHTML == 2)
+	{
+		my_score.innerHTML = score[1];
+		opp_score.innerHTML = score[0];
+	}
+});
 socket.on('endgame', (message) => {
-	console.log(`got endgame message: ${message}`);
 	let c = confirm(message);
 	if (c)
 		socket.emit('endgame', true)

@@ -9,17 +9,18 @@ const clientPath = `${__dirname}/../client`;
 console.log(`Serving static from ${clientPath}`);
 
 app.use(express.static(clientPath));
+app.use(express.static(__dirname));
 
 const server = http.createServer(app);
 
 const io = socketio(server);
 
 app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/index.html');
+	res.sendFile(__dirname + '/index/index.html');
 });
 
 app.get('/game', (req, res) => {
-	res.sendFile(__dirname + '/game.html');
+	res.sendFile(__dirname + '/game/game.html');
 });
 
 let waitingPlayer = null;
@@ -49,7 +50,7 @@ io.on('connection', (socket) => {
 		
 	});
 	socket.on('disconnect', (data) => {
-		console.log('Someone disconnected');
+		console.log('Someone disconnected', data);
 	});
 });
 

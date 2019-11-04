@@ -1,0 +1,38 @@
+*{
+    text-align: center;
+}
+
+#welcome-message {
+    padding-top: 20px;
+    font-size: 2em;
+}
+
+.wrapper {
+    padding-top: 30px;
+}
+
+.button {
+    padding-top: 100px;
+}
+
+#to-game-button {
+    width: 200px;
+    height: 60px;
+    text-transform: uppercase;
+    font-size: 1em;
+    background-color: rgb(142, 134, 255);
+}
+
+#to-game-button:hover {
+    background-color: rgb(101, 91, 255);
+}
+
+body {
+    background-color: rgb(235, 234, 233);
+    height: 900px;
+}
+
+.footer {
+    padding-top: 50px;
+    font-size: 0.8em;
+}

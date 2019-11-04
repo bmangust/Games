@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../style/style.css">
+	<link rel="stylesheet" href="/game/game.css">
+	<title>Tic Tac Toe</title>
+</head>
+<body>
+	<div class="header message">
+		<div>
+			<span>Welcome, player</span>
+			<span id="player-number">1</span>
+		</div>
+	</div>
+	<div class="score wrapper">
+		<span>me</span>
+		<span id="player-score">0</span>
+		<span class="space"></span>
+		<span id="opponent-score">0</span>
+		<span>opponent</span>
+	</div>
+	<div id="canvas-wrapper" class="wrapper">
+		<div class="canvas">
+			<canvas id="grid-layer" width="600" height="600"></canvas>
+			<canvas id="game-layer" width="600" height="600"></canvas>
+		</div>
+	</div>
+	<div class="message wrapper">
+		<div id="game-message"></div>
+	</div>
+	<div class="footer message">
+		<div>Creator: Max Kharitonov</div>
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/client.js"></script>
+</body>
+</html>
