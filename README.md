@@ -19,5 +19,7 @@ Obviously, games will be here
   JS for frontend and nodejs+express for backend <br>
   To start server: <br>
   > cd Games/tic-tac-toe/server <br>
-  > node server
-  
+  > node server <br>
+  <br>
+  To play open twice <br>
+  Games/tic-tac-toe/server/index/index.html
