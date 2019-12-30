@@ -12,3 +12,10 @@ Obviously, games will be here
   3 game modes: ai vs ai, player vs ai, player vs player
   written in python
   
+* tic-tac-toe
+  The same game, written for web.
+  JS for frontend and nodejs+express for backend
+  To start server:
+    cd Games/tic-tac-toe/server
+    node server
+  
